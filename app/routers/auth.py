@@ -18,7 +18,7 @@ def signup(data: UserCreate, request: Request, db: Session = Depends(get_db)):
     # 2. Limpa a senha
     senha_limpa = str(data.senha).strip()
 
-    # 3. Valida tamanho da senha (bcrypt)
+    # 3. Valida tamanho da senha
     if len(senha_limpa.encode("utf-8")) > 72:
         raise HTTPException(
             status_code=400,

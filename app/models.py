@@ -19,6 +19,7 @@ class Patient(Base):
     nome = Column(String, nullable=False)
     cpf = Column(String, unique=True, nullable=False, index=True)
     data_nascimento = Column(String, nullable=True)
+    email = Column(String, nullable=False, unique=True, index=True)
     telefone = Column(String, nullable=True)
     endereco = Column(String, nullable=True)
     ativo = Column(Boolean, default=True)
