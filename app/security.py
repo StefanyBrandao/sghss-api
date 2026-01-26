@@ -4,15 +4,19 @@ from datetime import datetime, timedelta
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-JWT_SECRET = "TROQUE_ISS0_PARA_UMA_CHAVE_FORTE"
+JWT_SECRET = "alunouninter4499602@"
 JWT_ALG = "HS256"
 JWT_EXPIRE_MIN = 60
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    senha = str(password).strip()
+    senha = senha.encode("utf-8")[:72].decode("utf-8", errors="ignore")
+    return pwd_context.hash(senha)
 
 def verify_password(password: str, hashed: str) -> bool:
-    return pwd_context.verify(password, hashed)
+    senha = str(password).strip()
+    senha = senha.encode("utf-8")[:72].decode("utf-8", errors="ignore")
+    return pwd_context.verify(senha, hashed)
 
 def create_token(user_id: int, role: str) -> str:
     payload = {

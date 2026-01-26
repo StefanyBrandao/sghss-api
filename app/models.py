@@ -11,6 +11,7 @@ class User(Base):
     senha_hash = Column(String, nullable=False)
     role = Column(String, nullable=False, default="PROFISSIONAL")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    profissional = relationship("Professional", back_populates="user", uselist=False)
 
 class Patient(Base):
     __tablename__ = "patients"
@@ -22,18 +23,16 @@ class Patient(Base):
     endereco = Column(String, nullable=True)
     ativo = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-
     consultas = relationship("Appointment", back_populates="paciente")
 
 class Appointment(Base):
     __tablename__ = "appointments"
     id = Column(Integer, primary_key=True)
     patient_id = Column(Integer, ForeignKey("patients.id"), nullable=False)
-    data_hora = Column(String, nullable=False)  # simples p/ entrega hoje
+    data_hora = Column(String, nullable=False)
     status = Column(String, nullable=False, default="AGENDADA")
     motivo = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-
     paciente = relationship("Patient", back_populates="consultas")
 
 class AuditLog(Base):
@@ -45,3 +44,13 @@ class AuditLog(Base):
     entidade_id = Column(Integer, nullable=True)
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
     ip = Column(String, nullable=True)
+
+class Professional(Base):
+    __tablename__ = "professionals"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, unique=True, index=True)
+    registro = Column(String, nullable=False)          # registro do profissional como CRM/COREN/CRF etc.
+    especialidade = Column(String, nullable=True)      # clínica geral, enfermagem...
+    ativo = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    user = relationship("User", back_populates="profissional")

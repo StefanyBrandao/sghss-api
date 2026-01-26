@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
+from datetime import datetime
 
 def mask_cpf(cpf: str) -> str:
     # 12345678900 -> ***.***.***-00 (simples)
@@ -42,3 +43,21 @@ class AppointmentOut(BaseModel):
     data_hora: str
     status: str
     motivo: Optional[str] = None
+
+class ProfessionalCreate(BaseModel):
+    user_id: int
+    registro: str
+    especialidade: Optional[str] = None
+    ativo: Optional[bool] = True
+
+class ProfessionalOut(BaseModel):
+    id: int
+    user_id: int
+    registro: str
+    especialidade: Optional[str] = None
+    ativo: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
